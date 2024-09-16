@@ -9,7 +9,7 @@ from sklearn.manifold import TSNE
 from sklearn.metrics import silhouette_score
 
 # Function to handle DBSCAN and visualizations
-def run_dbscan(df):
+def run_dbscan(df, eps, min_samples):
     # Preprocessing: Fill missing values
     df['Year'] = df['Year'].fillna(df['Year'].median())
     df['Publisher'] = df['Publisher'].fillna('Unknown')
@@ -18,8 +18,8 @@ def run_dbscan(df):
     scaler = StandardScaler()
     scaled_features = scaler.fit_transform(df[['Global_Sales', 'NA_Sales', 'EU_Sales', 'JP_Sales', 'Other_Sales', 'Year']])
 
-    # Apply DBSCAN clustering
-    dbscan = DBSCAN(eps=1, min_samples=8)
+    # Apply DBSCAN clustering with user-defined parameters
+    dbscan = DBSCAN(eps=eps, min_samples=min_samples)
     clusters = dbscan.fit_predict(scaled_features)
     
     # Add the cluster labels to the original DataFrame
@@ -92,7 +92,11 @@ if uploaded_file is not None:
     st.write("Here are the first few rows of your file:")
     st.write(df.head())
 
-    # Run DBSCAN clustering and analysis
-    run_dbscan(df)
+    # User inputs for DBSCAN parameters
+    eps = st.slider('Select eps (Neighborhood size):', min_value=0.1, max_value=10.0, value=1.0, step=0.1)
+    min_samples = st.slider('Select min_samples (Minimum samples per cluster):', min_value=1, max_value=20, value=8)
+
+    # Run DBSCAN clustering and analysis with user-selected parameters
+    run_dbscan(df, eps, min_samples)
 else:
     st.write("Please upload a CSV file to proceed.")
