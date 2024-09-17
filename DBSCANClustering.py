@@ -102,7 +102,7 @@ if uploaded_file is not None:
         st.write(df.head())
 
         # User inputs for DBSCAN parameters
-        eps = st.slider('Select eps (Neighborhood size):', min_value=0.1, max_value=10.0, value=1.0, step=0.1)
+        eps = st.slider('Select eps (Neighborhood size):', min_value=0.1, max_value=2.0, value=1.0, step=0.1)
         min_samples = st.slider('Select min_samples (Minimum samples per cluster):', min_value=1, max_value=20, value=8)
 
         # Run DBSCAN clustering and analysis with user-selected parameters
